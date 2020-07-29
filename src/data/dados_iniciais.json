@@ -44,6 +44,24 @@
       ]
     },
     {
+      "titulo": "Noivas, Casa e Comida",
+      "cor": "pink",
+      "link_extra": {
+        "text": "",
+        "url": ""
+      },
+      "videos": [
+        {
+          "titulo": "PRÉ WEDDING CAROL & THI",
+          "url": "https://www.youtube.com/watch?v=miEjLkmLAas"
+        },
+        {
+          "titulo": "PRÉ WEDDING KAKÁ & VINI",
+          "url": "https://www.youtube.com/watch?v=7ROvGtSQn4A"
+        }
+      ]
+    },
+    {
       "titulo": "Back End",
       "cor": "#00C86F",
       "link_extra": {
