@@ -28,7 +28,9 @@ function CadastroCategoria() {
   }
 
   useEffect(() => {
-    const URL_CAT = 'https://fifaflix.herokuapp.com/';
+    const URL_CAT = window.location.hostname.includes('localhost')
+      ? 'http://localhost:3000/categorias'
+      : 'https://fifaflix.herokuapp.com/categorias';
     fetch(URL_CAT).then(async (response) => {
       const resposta = await response.json();
       setCategorias([
