@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import useForm from '../../../hooks/useForm';
 import Button from '../../../components/Button';
 import videosRepository from '../../../repositories/videos';
 import categoriasRepository from '../../../repositories/categorias';
+import './video.css';
 
-function useFormik({
-  initialValues,
-}) {
-  return {
-    values: initialValues,
-  };
+function validate(values, categoriaEscolhida) {
+  const errors = {};
+  if (!values.url.includes('youtu')) {
+    errors.url = 'please, insert a valid URL';
+  }
+
+  if (categoriaEscolhida === undefined) {
+    errors.categoria = 'please, insert a valid categoria';
+  }
+
+  if (!values.titulo) {
+    errors.titulo = 'Please, insert a valid title';
+  }
+  return errors;
 }
 
 function CadastroVideo() {
-  const formik = useFormik({
-    initialValues: {
-      url: '',
-      categoria: '',
-    },
-  });
+  const [errors, setErrors] = useState({ });
+
   const history = useHistory();
   const [categorias, setCategorias] = useState([]);
   const categoryTitles = categorias.map(({ titulo }) => titulo);
@@ -39,8 +44,6 @@ function CadastroVideo() {
       });
   }, []);
 
-  console.log(categoryTitles);
-
   return (
     <PageDefault>
       <h1>Cadastro de Video</h1>
@@ -50,6 +53,14 @@ function CadastroVideo() {
 
         // eslint-disable-next-line max-len
         const categoriaEscolhida = categorias.find((categoria) => categoria.titulo === values.categoria);
+
+        const error = validate(values, categoriaEscolhida);
+        const countErrors = Object.entries(error).length;
+        setErrors(validate(values, categoriaEscolhida));
+
+        if (countErrors > 0) {
+          return;
+        }
 
         videosRepository.create({
           titulo: values.titulo,
@@ -68,25 +79,29 @@ function CadastroVideo() {
           value={values.titulo}
           onChange={handleChange}
         />
+        {errors.titulo && <span className="formField__error">{errors.titulo}</span>}
 
         <FormField
           label="URL"
           name="url"
-          value={formik.values.url}
-          onChange={formik.handleChange}
+          value={values.url}
+          onChange={handleChange}
         />
+        {errors.url && <span className="formField__error">{errors.url}</span>}
 
         <FormField
           label="Categoria"
           name="categoria"
-          value={formik.values.categoria}
-          onChange={formik.handleChange}
+          value={values.categoria}
+          onChange={handleChange}
           suggestions={categoryTitles}
         />
-
-        <Button type="submit">
-          Cadastrar
-        </Button>
+        {errors.categoria && <span className="formField__error">{errors.categoria}</span>}
+        <div>
+          <Button type="submit">
+            Cadastrar
+          </Button>
+        </div>
       </form>
 
       {/* <Link to="/cadastro/categoria">
